@@ -1,6 +1,5 @@
 var Buffer = require('safe-buffer').Buffer
 var Querystring = require('querystring')
-var defaultRequest = require('./request')
 
 const DEFAULT_URL_BASE = 'https://example.org/'
 
@@ -217,7 +216,11 @@ function requestOptions (requestOptions, options) {
  */
 function ClientOAuth2 (options, request) {
   this.options = options
-  this.request = request || defaultRequest
+  this.request = request
+
+  if (!request) {
+    throw new Error('Missing request function');
+  }
 
   this.code = new CodeFlow(this)
   this.token = new TokenFlow(this)
